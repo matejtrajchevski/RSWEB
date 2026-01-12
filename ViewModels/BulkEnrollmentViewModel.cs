@@ -8,8 +8,6 @@ namespace UniversityManagement.ViewModels
         public string Semester { get; set; } = string.Empty; // "Зимски" или "Летен"
         public List<long> SelectedStudentIds { get; set; } = new List<long>();
         public List<StudentCheckboxViewModel> AvailableStudents { get; set; } = new List<StudentCheckboxViewModel>();
-
-        // Filter properties
         public int? FilterSemester { get; set; }
         public string? FilterEducationLevel { get; set; }
     }

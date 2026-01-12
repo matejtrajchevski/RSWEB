@@ -15,8 +15,6 @@ namespace UniversityManagement.Controllers
             _context = context;
             _webHostEnvironment = webHostEnvironment;
         }
-
-        // GET: Students
         public async Task<IActionResult> Index(string? studentIdSearch, string? firstNameSearch, string? lastNameSearch, int? courseId)
         {
             var students = _context.Students.AsQueryable();
@@ -48,8 +46,6 @@ namespace UniversityManagement.Controllers
 
             return View(await students.ToListAsync());
         }
-
-        // GET: Students/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -69,14 +65,10 @@ namespace UniversityManagement.Controllers
 
             return View(student);
         }
-
-        // GET: Students/Create
         public IActionResult Create()
         {
             return View();
         }
-
-        // POST: Students/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,StudentId,FirstName,LastName,EnrollmentDate,AcquiredCredits,CurrentSemester,EducationLevel")] Student student, IFormFile? profilePicture)
@@ -104,8 +96,6 @@ namespace UniversityManagement.Controllers
             }
             return View(student);
         }
-
-        // GET: Students/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -120,8 +110,6 @@ namespace UniversityManagement.Controllers
             }
             return View(student);
         }
-
-        // POST: Students/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("Id,StudentId,FirstName,LastName,EnrollmentDate,AcquiredCredits,CurrentSemester,EducationLevel,ProfilePicture")] Student student, IFormFile? profilePicture)
@@ -177,8 +165,6 @@ namespace UniversityManagement.Controllers
             }
             return View(student);
         }
-
-        // GET: Students/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -195,8 +181,6 @@ namespace UniversityManagement.Controllers
 
             return View(student);
         }
-
-        // POST: Students/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
@@ -219,8 +203,6 @@ namespace UniversityManagement.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        // GET: Students/UploadDocument/5
         public async Task<IActionResult> UploadDocument(long? enrollmentId)
         {
             if (enrollmentId == null)
@@ -240,8 +222,6 @@ namespace UniversityManagement.Controllers
 
             return View(enrollment);
         }
-
-        // POST: Students/UploadDocument/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadDocument(long enrollmentId, IFormFile? seminalDocument, IFormFile? projectDocument)

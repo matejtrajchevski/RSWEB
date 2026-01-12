@@ -18,8 +18,6 @@ namespace UniversityManagement.Models
         [Required]
         [StringLength(20)]
         public string Role { get; set; } = string.Empty; // "Admin", "Professor", "Student"
-
-        // Foreign keys for linking to specific entities
         public int? TeacherId { get; set; }
         public Teacher? Teacher { get; set; }
 

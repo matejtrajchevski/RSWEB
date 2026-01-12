@@ -11,7 +11,6 @@ namespace UniversityManagement.Helpers
             var students = new List<Student>();
             using (var reader = new StreamReader(csvStream))
             {
-                // Skip header line
                 reader.ReadLine();
 
                 while (!reader.EndOfStream)
@@ -39,7 +38,6 @@ namespace UniversityManagement.Helpers
                     }
                     catch (Exception)
                     {
-                        // Skip invalid rows
                         continue;
                     }
                 }
@@ -53,7 +51,6 @@ namespace UniversityManagement.Helpers
             var teachers = new List<Teacher>();
             using (var reader = new StreamReader(csvStream))
             {
-                // Skip header line
                 reader.ReadLine();
 
                 while (!reader.EndOfStream)
@@ -82,7 +79,6 @@ namespace UniversityManagement.Helpers
                     }
                     catch (Exception)
                     {
-                        // Skip invalid rows
                         continue;
                     }
                 }
@@ -96,7 +92,6 @@ namespace UniversityManagement.Helpers
             var courses = new List<Course>();
             using (var reader = new StreamReader(csvStream))
             {
-                // Skip header line
                 reader.ReadLine();
 
                 while (!reader.EndOfStream)
@@ -121,7 +116,6 @@ namespace UniversityManagement.Helpers
                     }
                     catch (Exception)
                     {
-                        // Skip invalid rows
                         continue;
                     }
                 }
@@ -135,7 +129,6 @@ namespace UniversityManagement.Helpers
             var students = new List<StudentImportViewModel>();
             using (var reader = new StreamReader(csvStream))
             {
-                // Skip header line
                 reader.ReadLine();
 
                 while (!reader.EndOfStream)
@@ -165,7 +158,6 @@ namespace UniversityManagement.Helpers
                     }
                     catch (Exception)
                     {
-                        // Skip invalid rows
                         continue;
                     }
                 }
@@ -179,7 +171,6 @@ namespace UniversityManagement.Helpers
             var teachers = new List<TeacherImportViewModel>();
             using (var reader = new StreamReader(csvStream))
             {
-                // Skip header line
                 reader.ReadLine();
 
                 while (!reader.EndOfStream)
@@ -210,7 +201,6 @@ namespace UniversityManagement.Helpers
                     }
                     catch (Exception)
                     {
-                        // Skip invalid rows
                         continue;
                     }
                 }

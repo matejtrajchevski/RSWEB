@@ -31,8 +31,6 @@ namespace UniversityManagement.Controllers
             var role = HttpContext.Session.GetString("Role");
             return role == "Student" && GetStudentId() != null;
         }
-
-        // GET: StudentDashboard/Index
         public async Task<IActionResult> Index()
         {
             if (!CheckStudentRole())
@@ -83,8 +81,6 @@ namespace UniversityManagement.Controllers
             ViewBag.Student = student;
             return View(enrollments);
         }
-
-        // GET: StudentDashboard/EditUrls/5
         public async Task<IActionResult> EditUrls(long? id)
         {
             if (!CheckStudentRole())
@@ -104,8 +100,6 @@ namespace UniversityManagement.Controllers
 
             return View(enrollment);
         }
-
-        // POST: StudentDashboard/EditUrls/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUrls(long id, string? projectUrl, IFormFile? seminalDocument)
@@ -120,14 +114,10 @@ namespace UniversityManagement.Controllers
                 .FirstOrDefaultAsync(e => e.Id == id && e.StudentId == studentId);
 
             if (enrollment == null) return NotFound();
-
-            // Update ProjectURL (GitHub link)
             if (!string.IsNullOrWhiteSpace(projectUrl))
             {
                 enrollment.ProjectUrl = projectUrl;
             }
-
-            // Upload Seminal Document (doc, docx, pdf)
             if (seminalDocument != null && seminalDocument.Length > 0)
             {
                 var allowedExtensions = new[] { ".doc", ".docx", ".pdf" };
@@ -144,8 +134,6 @@ namespace UniversityManagement.Controllers
                     {
                         await seminalDocument.CopyToAsync(fileStream);
                     }
-
-                    // Delete old file if exists
                     if (!string.IsNullOrEmpty(enrollment.SeminalUrl))
                     {
                         var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, enrollment.SeminalUrl.TrimStart('/'));

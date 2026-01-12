@@ -14,8 +14,6 @@ namespace UniversityManagement.Controllers
         {
             _context = context;
         }
-
-        // GET: Courses
         public async Task<IActionResult> Index(string? titleSearch, int? semesterSearch, string? programmeSearch, int? teacherId)
         {
             var courses = _context.Courses
@@ -53,8 +51,6 @@ namespace UniversityManagement.Controllers
 
             return View(await courses.ToListAsync());
         }
-
-        // GET: Courses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -76,16 +72,12 @@ namespace UniversityManagement.Controllers
 
             return View(course);
         }
-
-        // GET: Courses/Create
         public IActionResult Create()
         {
             ViewData["FirstTeacherId"] = new SelectList(_context.Teachers, "Id", "FirstName");
             ViewData["SecondTeacherId"] = new SelectList(_context.Teachers, "Id", "FirstName");
             return View();
         }
-
-        // POST: Courses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Credits,Semester,Programme,EducationLevel,FirstTeacherId,SecondTeacherId")] Course course)
@@ -100,8 +92,6 @@ namespace UniversityManagement.Controllers
             ViewData["SecondTeacherId"] = new SelectList(_context.Teachers, "Id", "FirstName", course.SecondTeacherId);
             return View(course);
         }
-
-        // GET: Courses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -118,8 +108,6 @@ namespace UniversityManagement.Controllers
             ViewData["SecondTeacherId"] = new SelectList(_context.Teachers, "Id", "FirstName", course.SecondTeacherId);
             return View(course);
         }
-
-        // POST: Courses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Credits,Semester,Programme,EducationLevel,FirstTeacherId,SecondTeacherId")] Course course)
@@ -153,8 +141,6 @@ namespace UniversityManagement.Controllers
             ViewData["SecondTeacherId"] = new SelectList(_context.Teachers, "Id", "FirstName", course.SecondTeacherId);
             return View(course);
         }
-
-        // GET: Courses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -173,8 +159,6 @@ namespace UniversityManagement.Controllers
 
             return View(course);
         }
-
-        // POST: Courses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -188,8 +172,6 @@ namespace UniversityManagement.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        // GET: Courses/EnrollStudents/5
         public async Task<IActionResult> EnrollStudents(int? id)
         {
             if (id == null)
@@ -217,8 +199,6 @@ namespace UniversityManagement.Controllers
 
             return View(course);
         }
-
-        // POST: Courses/EnrollStudents/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EnrollStudents(int id, long studentId, string? semester, int? year)
@@ -236,8 +216,6 @@ namespace UniversityManagement.Controllers
 
             return RedirectToAction(nameof(EnrollStudents), new { id = id });
         }
-
-        // GET: Courses/EditEnrollment/5
         public async Task<IActionResult> EditEnrollment(long? id)
         {
             if (id == null)
@@ -257,8 +235,6 @@ namespace UniversityManagement.Controllers
 
             return View(enrollment);
         }
-
-        // POST: Courses/EditEnrollment/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditEnrollment(long id, [Bind("Id,CourseId,StudentId,Semester,Year,Grade,ExamPoints,SeminalPoints,ProjectPoints,AdditionalPoints,FinishDate")] Enrollment enrollment)
@@ -290,8 +266,6 @@ namespace UniversityManagement.Controllers
             }
             return View(enrollment);
         }
-
-        // POST: Courses/RemoveEnrollment/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveEnrollment(long id, int courseId)

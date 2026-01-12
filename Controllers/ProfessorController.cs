@@ -25,8 +25,6 @@ namespace UniversityManagement.Controllers
             var role = HttpContext.Session.GetString("Role");
             return role == "Professor" && GetTeacherId() != null;
         }
-
-        // GET: Professor/Index
         public async Task<IActionResult> Index()
         {
             if (!CheckProfessorRole())
@@ -43,8 +41,6 @@ namespace UniversityManagement.Controllers
 
             return View(courses);
         }
-
-        // GET: Professor/CourseDetails/5
         public async Task<IActionResult> CourseDetails(int? id, int? year)
         {
             if (!CheckProfessorRole())
@@ -62,19 +58,13 @@ namespace UniversityManagement.Controllers
                     (c.FirstTeacherId == teacherId || c.SecondTeacherId == teacherId));
 
             if (course == null) return NotFound();
-
-            // Get available years
             var availableYears = await _context.Enrollments
                 .Where(e => e.CourseId == id && e.Year != null)
                 .Select(e => e.Year!.Value)
                 .Distinct()
                 .OrderByDescending(y => y)
                 .ToListAsync();
-
-            // If no year specified, use the latest year
             var selectedYear = year ?? (availableYears.Any() ? availableYears.First() : DateTime.Now.Year);
-
-            // Get enrollments for the selected year
             var enrollments = await _context.Enrollments
                 .Where(e => e.CourseId == id && e.Year == selectedYear)
                 .Include(e => e.Student)
@@ -110,8 +100,6 @@ namespace UniversityManagement.Controllers
 
             return View(viewModel);
         }
-
-        // GET: Professor/EditEnrollment/5
         public async Task<IActionResult> EditEnrollment(long? id)
         {
             if (!CheckProfessorRole())
@@ -132,8 +120,6 @@ namespace UniversityManagement.Controllers
                     (e.Course!.FirstTeacherId == teacherId || e.Course.SecondTeacherId == teacherId));
 
             if (enrollment == null) return NotFound();
-
-            // Check if student is active
             if (enrollment.FinishDate != null)
             {
                 TempData["Error"] = "Не можете да уредувате податоци за неактивен студент.";
@@ -142,8 +128,6 @@ namespace UniversityManagement.Controllers
 
             return View(enrollment);
         }
-
-        // POST: Professor/EditEnrollment/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditEnrollment(long id, int? examPoints, int? seminalPoints,
@@ -161,8 +145,6 @@ namespace UniversityManagement.Controllers
                     (e.Course!.FirstTeacherId == teacherId || e.Course.SecondTeacherId == teacherId));
 
             if (enrollment == null) return NotFound();
-
-            // Check if student is active
             if (enrollment.FinishDate != null)
             {
                 TempData["Error"] = "Не можете да уредувате податоци за неактивен студент.";

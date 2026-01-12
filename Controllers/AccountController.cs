@@ -13,14 +13,10 @@ namespace UniversityManagement.Controllers
         {
             _context = context;
         }
-
-        // GET: Account/Login
         public IActionResult Login()
         {
             return View();
         }
-
-        // POST: Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string username, string password)
@@ -51,8 +47,6 @@ namespace UniversityManagement.Controllers
             ViewBag.Error = "Invalid username or password";
             return View();
         }
-
-        // GET: Account/Logout
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

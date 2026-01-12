@@ -24,8 +24,6 @@ namespace UniversityManagement.Controllers
             var role = HttpContext.Session.GetString("Role");
             return role == "Admin";
         }
-
-        // Dashboard
         public async Task<IActionResult> Index()
         {
             if (!CheckAdminRole())
@@ -167,14 +165,11 @@ namespace UniversityManagement.Controllers
             var student = await _context.Students.FindAsync(id);
             if (student != null)
             {
-                // Delete associated user account first
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.StudentId == id);
                 if (user != null)
                 {
                     _context.Users.Remove(user);
                 }
-
-                // Delete associated enrollments
                 var enrollments = await _context.Enrollments.Where(e => e.StudentId == id).ToListAsync();
                 _context.Enrollments.RemoveRange(enrollments);
 
@@ -193,15 +188,11 @@ namespace UniversityManagement.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Students));
         }
-
-        // GET: Admin/ImportStudents
         public IActionResult ImportStudents()
         {
             if (!CheckAdminRole()) return RedirectToAction("Login", "Account");
             return View();
         }
-
-        // POST: Admin/ImportStudents
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ImportStudents(IFormFile csvFile)
@@ -231,8 +222,6 @@ namespace UniversityManagement.Controllers
                         ViewBag.Error = "Не се пронајдени валидни податоци во CSV датотеката.";
                         return View();
                     }
-
-                    // Креирај Student записи
                     foreach (var studentData in studentsData)
                     {
                         var student = new Student
@@ -248,8 +237,6 @@ namespace UniversityManagement.Controllers
                         _context.Students.Add(student);
                     }
                     await _context.SaveChangesAsync();
-
-                    // Креирај User записи со password од CSV
                     var addedStudents = await _context.Students
                         .Where(s => studentsData.Select(sd => sd.StudentId).Contains(s.StudentId))
                         .ToListAsync();
@@ -415,14 +402,11 @@ namespace UniversityManagement.Controllers
             var teacher = await _context.Teachers.FindAsync(id);
             if (teacher != null)
             {
-                // Delete associated user account first
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.TeacherId == id);
                 if (user != null)
                 {
                     _context.Users.Remove(user);
                 }
-
-                // Set FirstTeacherId and SecondTeacherId to null for all courses taught by this teacher
                 var coursesAsFirstTeacher = await _context.Courses
                     .Where(c => c.FirstTeacherId == id)
                     .ToListAsync();
@@ -456,15 +440,11 @@ namespace UniversityManagement.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Teachers));
         }
-
-        // GET: Admin/ImportTeachers
         public IActionResult ImportTeachers()
         {
             if (!CheckAdminRole()) return RedirectToAction("Login", "Account");
             return View();
         }
-
-        // POST: Admin/ImportTeachers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ImportTeachers(IFormFile csvFile)
@@ -494,8 +474,6 @@ namespace UniversityManagement.Controllers
                         ViewBag.Error = "Не се пронајдени валидни податоци во CSV датотеката.";
                         return View();
                     }
-
-                    // Креирај Teacher записи
                     foreach (var teacherData in teachersData)
                     {
                         var teacher = new Teacher
@@ -510,8 +488,6 @@ namespace UniversityManagement.Controllers
                         _context.Teachers.Add(teacher);
                     }
                     await _context.SaveChangesAsync();
-
-                    // Креирај User записи со password од CSV
                     var addedTeachers = await _context.Teachers
                         .Where(t => teachersData.Select(td => td.FirstName + " " + td.LastName)
                             .Contains(t.FirstName + " " + t.LastName))
@@ -661,15 +637,11 @@ namespace UniversityManagement.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Courses));
         }
-
-        // GET: Admin/ImportCourses
         public IActionResult ImportCourses()
         {
             if (!CheckAdminRole()) return RedirectToAction("Login", "Account");
             return View();
         }
-
-        // POST: Admin/ImportCourses
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ImportCourses(IFormFile csvFile)
@@ -718,8 +690,6 @@ namespace UniversityManagement.Controllers
         #endregion
 
         #region Enrollment Management
-
-        // GET: Admin/EnrollStudents/5
         public async Task<IActionResult> EnrollStudents(int? id, int? filterSemester, string? filterEducationLevel)
         {
             if (!CheckAdminRole()) return RedirectToAction("Login", "Account");
@@ -735,8 +705,6 @@ namespace UniversityManagement.Controllers
 
             var studentsQuery = _context.Students
                 .Where(s => !enrolledStudentIds.Contains(s.Id));
-
-            // Apply filters
             if (filterSemester.HasValue)
             {
                 studentsQuery = studentsQuery.Where(s => s.CurrentSemester == filterSemester.Value);
@@ -773,8 +741,6 @@ namespace UniversityManagement.Controllers
 
             return View(viewModel);
         }
-
-        // POST: Admin/EnrollStudents
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EnrollStudents(BulkEnrollmentViewModel model)
@@ -801,8 +767,6 @@ namespace UniversityManagement.Controllers
 
             return RedirectToAction(nameof(ManageEnrollments), new { id = model.CourseId });
         }
-
-        // GET: Admin/ManageEnrollments/5
         public async Task<IActionResult> ManageEnrollments(int? id)
         {
             if (!CheckAdminRole()) return RedirectToAction("Login", "Account");
@@ -817,8 +781,6 @@ namespace UniversityManagement.Controllers
 
             return View(course);
         }
-
-        // POST: Admin/UnenrollStudent
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UnenrollStudent(long enrollmentId, DateTime? finishDate)
@@ -958,8 +920,6 @@ namespace UniversityManagement.Controllers
 
             return RedirectToAction(nameof(Users));
         }
-
-        // Генерирај User записи за сите професори и студенти без корисник
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GenerateUsersForAll()
@@ -967,8 +927,6 @@ namespace UniversityManagement.Controllers
             if (!CheckAdminRole()) return RedirectToAction("Login", "Account");
 
             int createdCount = 0;
-
-            // Професори без User
             var teachersWithoutUser = await _context.Teachers
                 .Where(t => !_context.Users.Any(u => u.TeacherId == t.Id))
                 .ToListAsync();
@@ -991,8 +949,6 @@ namespace UniversityManagement.Controllers
                     createdCount++;
                 }
             }
-
-            // Студенти без User
             var studentsWithoutUser = await _context.Students
                 .Where(s => !_context.Users.Any(u => u.StudentId == s.Id))
                 .ToListAsync();
