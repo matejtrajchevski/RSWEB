@@ -1,0 +1,85 @@
+@model UniversityManagement.Models.Student
+
+@{
+    ViewData["Title"] = "Student Details";
+}
+
+<h1>Student Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.StudentId)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.StudentId)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.FirstName)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.FirstName)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.LastName)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.LastName)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.EnrollmentDate)</dt>
+        <dd class="col-sm-9">@(Model.EnrollmentDate?.ToString("dd/MM/yyyy"))</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AcquiredCredits)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.AcquiredCredits)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CurrentSemester)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CurrentSemester)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.EducationLevel)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.EducationLevel)</dd>
+
+        @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+        {
+            <dt class="col-sm-3">Profile Picture</dt>
+            <dd class="col-sm-9">
+                <img src="@Model.ProfilePicture" alt="Profile" style="max-width: 300px;" class="img-thumbnail" />
+            </dd>
+        }
+    </dl>
+
+    <h3 class="mt-4">Enrolled Courses</h3>
+    @if (Model.Enrollments != null && Model.Enrollments.Any())
+    {
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Semester</th>
+                    <th>Year</th>
+                    <th>Grade</th>
+                    <th>Exam Points</th>
+                    <th>Seminal Points</th>
+                    <th>Project Points</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enrollment in Model.Enrollments)
+                {
+                    <tr>
+                        <td>@enrollment.Course?.Title</td>
+                        <td>@enrollment.Semester</td>
+                        <td>@enrollment.Year</td>
+                        <td>@enrollment.Grade</td>
+                        <td>@enrollment.ExamPoints</td>
+                        <td>@enrollment.SeminalPoints</td>
+                        <td>@enrollment.ProjectPoints</td>
+                        <td>
+                            <a asp-controller="Students" asp-action="UploadDocument" asp-route-enrollmentId="@enrollment.Id" class="btn btn-sm btn-primary">Upload</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No courses enrolled.</p>
+    }
+</div>
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

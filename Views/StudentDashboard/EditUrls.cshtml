@@ -1,0 +1,54 @@
+@model UniversityManagement.Models.Enrollment
+
+@{
+    ViewData["Title"] = "Уреди линкови";
+}
+
+<div class="container mt-4">
+    <h2>Уреди линкови за предметот</h2>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>@Model.Course?.Title</h5>
+            <p><strong>Година:</strong> @Model.Year | <strong>Семестар:</strong> @Model.Semester</p>
+        </div>
+    </div>
+
+    <form method="post" asp-action="EditUrls" asp-route-id="@Model.Id" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group mb-3">
+            <label>Прикачи семинарска работа (DOC, DOCX или PDF)</label>
+            <input type="file" name="seminalDocument" class="form-control" accept=".doc,.docx,.pdf" />
+            @if (!string.IsNullOrEmpty(Model.SeminalUrl))
+            {
+                <small class="form-text text-muted">
+                    Тековна датотека: <a href="@Model.SeminalUrl" target="_blank">@Model.SeminalUrl</a>
+                </small>
+            }
+        </div>
+
+        <div class="form-group mb-3">
+            <label>GitHub линк за проект</label>
+            <input type="url" name="projectUrl" class="form-control" value="@Model.ProjectUrl" placeholder="https://github.com/username/repository" />
+            <small class="form-text text-muted">Внесете линк до вашиот GitHub репозиториум</small>
+        </div>
+
+        <div class="alert alert-warning">
+            <strong>Напомена:</strong> Полињата за поени, оценка и датум на завршување можат да се прегледаат, но не можат да се менуваат од страна на студентот.
+            <ul>
+                <li><strong>Поени од испит:</strong> @(Model.ExamPoints?.ToString() ?? "Нема")</li>
+                <li><strong>Поени од семинарска:</strong> @(Model.SeminalPoints?.ToString() ?? "Нема")</li>
+                <li><strong>Поени од проект:</strong> @(Model.ProjectPoints?.ToString() ?? "Нема")</li>
+                <li><strong>Дополнителни поени:</strong> @(Model.AdditionalPoints?.ToString() ?? "Нема")</li>
+                <li><strong>Оценка:</strong> @(Model.Grade?.ToString() ?? "Нема")</li>
+                <li><strong>Датум на завршување:</strong> @(Model.FinishDate?.ToString("dd.MM.yyyy") ?? "Нема")</li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Зачувај промени</button>
+            <a asp-action="Index" class="btn btn-secondary">Назад</a>
+        </div>
+    </form>
+</div>

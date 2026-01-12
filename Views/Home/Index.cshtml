@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Почетна";
+}
+
+<div class="home-container">
+    <div class="hero-section text-center mb-5">
+        <h1 class="display-3 fw-bold mb-3">Систем за управување на универзитет</h1>
+        <p class="lead mb-4">Добредојдовте во системот за управување на Факултетот за електротехника и информациски технологии</p>
+
+        @if (string.IsNullOrEmpty(Context.Session.GetString("Role")))
+        {
+            <div class="mt-4">
+                <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg me-3">Најави се</a>
+            </div>
+        }
+        else
+        {
+            var role = Context.Session.GetString("Role");
+            <div class="welcome-message">
+                <h3 class="mb-4">Добредојдовте, @Context.Session.GetString("Username")!</h3>
+                @if (role == "Admin")
+                {
+                    <a asp-controller="Admin" asp-action="Index" class="btn btn-primary btn-lg">Контролна табла</a>
+                }
+                else if (role == "Professor")
+                {
+                    <a asp-controller="Professor" asp-action="Index" class="btn btn-primary btn-lg">Мои предмети</a>
+                }
+                else if (role == "Student")
+                {
+                    <a asp-controller="StudentDashboard" asp-action="Index" class="btn btn-primary btn-lg">Мои предмети</a>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .home-container {
+        padding: 2rem 0;
+    }
+
+    .hero-section {
+        padding: 3rem 0;
+        background: linear-gradient(135deg, rgba(13, 110, 253, 0.05) 0%, rgba(13, 110, 253, 0.1) 100%);
+        border-radius: 1rem;
+        margin: 0 -1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    [data-theme="dark"] .hero-section {
+        background: linear-gradient(135deg, rgba(13, 110, 253, 0.1) 0%, rgba(13, 110, 253, 0.15) 100%);
+    }
+
+    .hero-section h1 {
+        color: #0d6efd;
+    }
+
+    [data-theme="dark"] .hero-section h1 {
+        color: #6ea8fe;
+    }
+
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    [data-theme="dark"] .feature-card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .feature-icon {
+        color: #0d6efd;
+    }
+
+    [data-theme="dark"] .feature-icon {
+        color: #6ea8fe;
+    }
+
+    .welcome-message {
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 0.5rem;
+        display: inline-block;
+    }
+
+    [data-theme="dark"] .welcome-message {
+        background: rgba(45, 45, 45, 0.8);
+    }
+</style>

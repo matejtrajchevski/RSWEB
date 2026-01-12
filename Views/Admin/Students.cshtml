@@ -1,0 +1,46 @@
+@model IEnumerable<UniversityManagement.Models.Student>
+
+@{
+    ViewData["Title"] = "Студенти";
+}
+
+<div class="container mt-4">
+    <h2>Управување со студенти</h2>
+
+    <div class="mb-3">
+        <a asp-action="CreateStudent" class="btn btn-primary">Додади нов студент</a>
+        <a asp-action="ImportStudents" class="btn btn-success">Import CSV</a>
+        <a asp-action="Index" class="btn btn-secondary">Назад</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Индекс</th>
+                <th>Име</th>
+                <th>Презиме</th>
+                <th>Ниво на образование</th>
+                <th>Семестар</th>
+                <th>Акции</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.StudentId</td>
+                    <td>@student.FirstName</td>
+                    <td>@student.LastName</td>
+                    <td>@student.EducationLevel</td>
+                    <td>@student.CurrentSemester</td>
+                    <td>
+                        <a asp-action="EditStudent" asp-route-id="@student.Id" class="action-link">Уреди</a> /
+                        <a asp-action="Details" asp-route-id="@student.Id" class="action-link">Запиши студенти</a> /
+                        <a asp-action="Enrollments" asp-route-id="@student.Id" class="action-link">Запишани</a> /
+                        <a asp-action="DeleteStudent" asp-route-id="@student.Id" class="action-link text-danger">Избриши</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
