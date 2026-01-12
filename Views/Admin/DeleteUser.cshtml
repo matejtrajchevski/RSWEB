@@ -1,0 +1,45 @@
+@model UniversityManagement.Models.User
+
+@{
+    ViewData["Title"] = "Избриши корисник";
+}
+
+<div class="container mt-4">
+    <h2>Избриши корисник</h2>
+
+    <div class="alert alert-warning">
+        <h4>Дали сте сигурни дека сакате да го избришете овој корисник?</h4>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Username</dt>
+                <dd class="col-sm-9">@Model.Username</dd>
+
+                <dt class="col-sm-3">Улога</dt>
+                <dd class="col-sm-9">@Model.Role</dd>
+
+                @if (Model.Role == "Professor" && Model.Teacher != null)
+                {
+                    <dt class="col-sm-3">Професор</dt>
+                    <dd class="col-sm-9">@Model.Teacher.FirstName @Model.Teacher.LastName</dd>
+                }
+                else if (Model.Role == "Student" && Model.Student != null)
+                {
+                    <dt class="col-sm-3">Студент</dt>
+                    <dd class="col-sm-9">@Model.Student.FirstName @Model.Student.LastName (@Model.Student.StudentId)</dd>
+                }
+            </dl>
+        </div>
+    </div>
+
+    <form method="post" asp-action="DeleteUser">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <div class="mt-3">
+            <button type="submit" class="btn btn-danger">Избриши</button>
+            <a asp-action="Users" class="btn btn-secondary">Откажи</a>
+        </div>
+    </form>
+</div>

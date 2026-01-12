@@ -49,6 +49,17 @@ node_modules/
 # Mac
 .DS_Store
 
+# Temporary files
+temp_*.txt
+*.tmp
+
+# Old CSV files (keep only sample files)
+wwwroot/profesori.csv
+wwwroot/studenti.csv
+
+# Claude Code
+.claude/
+
 # Windows
 Thumbs.db
 ehthumbs.db

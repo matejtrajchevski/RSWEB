@@ -1,0 +1,77 @@
+@model UniversityManagement.Models.Course
+
+@{
+    ViewData["Title"] = "Додади предмет";
+}
+
+<div class="container mt-4">
+    <h2>Додади нов предмет</h2>
+
+    <form method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group mb-3">
+            <label asp-for="Title">Наслов</label>
+            <input asp-for="Title" class="form-control" required />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label asp-for="Credits">Кредити</label>
+                    <input asp-for="Credits" type="number" class="form-control" required />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label asp-for="Semester">Семестар</label>
+                    <input asp-for="Semester" type="number" class="form-control" required />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label asp-for="Programme">Програма</label>
+                    <input asp-for="Programme" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="EducationLevel">Ниво на образование</label>
+                    <input asp-for="EducationLevel" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="FirstTeacherId">Прв професор</label>
+                    <select asp-for="FirstTeacherId" class="form-control" asp-items="ViewBag.FirstTeacherId">
+                        <option value="">-- Избери --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="SecondTeacherId">Втор професор</label>
+                    <select asp-for="SecondTeacherId" class="form-control" asp-items="ViewBag.SecondTeacherId">
+                        <option value="">-- Избери --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Зачувај</button>
+            <a asp-action="Courses" class="btn btn-secondary">Откажи</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,67 @@
+@model IEnumerable<UniversityManagement.Models.User>
+
+@{
+    ViewData["Title"] = "Корисници";
+}
+
+<div class="container mt-4">
+    <h2>Уреди корисници</h2>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    <div class="mb-3">
+        <a asp-action="CreateUser" class="btn btn-primary">Додади нов корисник</a>
+
+        <form asp-action="GenerateUsersForAll" method="post" style="display:inline;">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-success" onclick="return confirm('Дали сте сигурни дека сакате да генерирате корисници за сите професори и студенти?')">
+                Генерирај корисници за сите
+            </button>
+        </form>
+
+        <a asp-action="Index" class="btn btn-secondary">Назад</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Улога</th>
+                <th>Професор/Студент</th>
+                <th>Акции</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.Role</td>
+                    <td>
+                        @if (user.Role == "Professor" && user.Teacher != null)
+                        {
+                            @($"{user.Teacher.FirstName} {user.Teacher.LastName}")
+                        }
+                        else if (user.Role == "Student" && user.Student != null)
+                        {
+                            @($"{user.Student.FirstName} {user.Student.LastName} ({user.Student.StudentId})")
+                        }
+                        else
+                        {
+                            <text>-</text>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="EditUser" asp-route-id="@user.Id" class="action-link">Уреди</a> /
+                        <a asp-action="DeleteUser" asp-route-id="@user.Id" class="action-link text-danger">Избриши</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

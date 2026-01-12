@@ -14,6 +14,7 @@ namespace UniversityManagement.Data
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,13 +39,27 @@ namespace UniversityManagement.Data
                 .HasOne(c => c.FirstTeacher)
                 .WithMany(t => t.CoursesAsFirstTeacher)
                 .HasForeignKey(c => c.FirstTeacherId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Configure Teacher-Course relationships (SecondTeacher)
             modelBuilder.Entity<Course>()
                 .HasOne(c => c.SecondTeacher)
                 .WithMany(t => t.CoursesAsSecondTeacher)
                 .HasForeignKey(c => c.SecondTeacherId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Configure User-Teacher relationship
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Teacher)
+                .WithMany()
+                .HasForeignKey(u => u.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configure User-Student relationship
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Student)
+                .WithMany()
+                .HasForeignKey(u => u.StudentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Configure column names and types as per schema
@@ -52,6 +67,7 @@ namespace UniversityManagement.Data
             modelBuilder.Entity<Teacher>().ToTable("Teacher");
             modelBuilder.Entity<Course>().ToTable("Course");
             modelBuilder.Entity<Enrollment>().ToTable("Enrollment");
+            modelBuilder.Entity<User>().ToTable("User");
         }
     }
 }

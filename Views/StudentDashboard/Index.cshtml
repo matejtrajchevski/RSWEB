@@ -1,0 +1,87 @@
+@model IEnumerable<UniversityManagement.ViewModels.StudentEnrollmentViewModel>
+
+@{
+    ViewData["Title"] = "Мои предмети";
+    var student = ViewBag.Student as UniversityManagement.Models.Student;
+}
+
+<div class="container mt-4">
+    <h2>Добредојдовте, @student?.FirstName @student?.LastName</h2>
+    <p class="lead">Индекс: @student?.StudentId</p>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @if (Model.Any())
+    {
+        <h4>Мои запишани предмети</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Предмет</th>
+                    <th>Кредити</th>
+                    <th>Година</th>
+                    <th>Семестар</th>
+                    <th>Испит</th>
+                    <th>Семинарска</th>
+                    <th>Проект</th>
+                    <th>Дополнително</th>
+                    <th>Вкупно</th>
+                    <th>Оценка</th>
+                    <th>Професор</th>
+                    <th>Акции</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enrollment in Model)
+                {
+                    <tr>
+                        <td>@enrollment.CourseTitle</td>
+                        <td>@enrollment.CourseCredits</td>
+                        <td>@enrollment.Year</td>
+                        <td>@enrollment.Semester</td>
+                        <td>@(enrollment.ExamPoints?.ToString() ?? "—")</td>
+                        <td>@(enrollment.SeminalPoints?.ToString() ?? "—")</td>
+                        <td>@(enrollment.ProjectPoints?.ToString() ?? "—")</td>
+                        <td>@(enrollment.AdditionalPoints?.ToString() ?? "—")</td>
+                        <td><strong>@(enrollment.TotalPoints?.ToString() ?? "0")</strong></td>
+                        <td>
+                            @if (enrollment.Grade.HasValue)
+                            {
+                                <span class="badge bg-primary">@enrollment.Grade</span>
+                            }
+                            else
+                            {
+                                <span>—</span>
+                            }
+                        </td>
+                        <td>
+                            @enrollment.FirstTeacherName
+                            @if (!string.IsNullOrEmpty(enrollment.SecondTeacherName))
+                            {
+                                <br />@enrollment.SecondTeacherName
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="EditUrls" asp-route-id="@enrollment.EnrollmentId" class="btn btn-sm btn-success">
+                                Уреди линкови
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Моментално не сте запишани на ниту еден предмет.
+        </div>
+    }
+</div>
